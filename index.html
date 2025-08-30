@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Neon Space Defender</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="uiOverlay">
+            <div id="gameTitle">NEON SPACE DEFENDER</div>
+            
+            <div class="top-bar">
+                <div class="top-left-panel">
+                    <div id="scorePanel">
+                        <div>SCORE</div>
+                        <div id="score">0</div>
+                    </div>
+                </div>
+                
+                <div class="top-right-panel">
+                    <div id="healthBar">
+                        <div id="healthFill"></div>
+                    </div>
+                    <div id="audioControl">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="center-panel">
+                <div class="crosshair"></div>
+                <div class="speed-warning" id="speedWarning">SLOW SPEED MODE</div>
+            </div>
+            
+            <div id="baseHealthBar">
+                <div id="baseHealthFill"></div>
+            </div>
+            
+            <div class="left-panel">
+                <div id="velocityIndicator">VELOCITY: 0.0</div>
+                <div class="speed-indicator-bar">
+                    <div class="speed-indicator-fill" id="speedIndicator"></div>
+                </div>
+                <div id="enemyCount">ENEMIES: 0/0</div>
+            </div>
+            
+            <div class="bottom-left-panel">
+                <div id="missionPanel">
+                    <div id="missionTitle">MISSION: DESTROY ENEMY BASE</div>
+                    <div>Destroy the enemy base located at the city center. Avoid enemy fighters and buildings.</div>
+                    <div id="missionProgress">
+                        <div id="missionFill"></div>
+                    </div>
+                </div>
+                <div id="positionPanel">
+                    POSITION: [0, 0, 0]
+                </div>
+            </div>
+            
+            <div class="bottom-right-panel">
+                <div id="orientationIndicator">
+                    <div id="orientationArrow"></div>
+                    <div id="orientationDot"></div>
+                </div>
+                <div id="radar">
+                    <div class="radar-center"></div>
+                    <div class="radar-sweep"></div>
+                </div>
+            </div>
+            
+            <div id="controlsInfo">
+                <div>CONTROLS</div>
+                <div class="control-grid">
+                    <div class="control-item"><span class="control-key">W</span> Forward</div>
+                    <div class="control-item"><span class="control-key">S</span> Backward</div>
+                    <div class="control-item"><span class="control-key">A</span> Left</div>
+                    <div class="control-item"><span class="control-key">D</span> Right</div>
+                    <div class="control-item"><span class="control-key">Q</span> Up</div>
+                    <div class="control-item"><span class="control-key">E</span> Down</div>
+                    <div class="control-item"><span class="control-key">↑ ↓</span> Pitch</div>
+                    <div class="control-item"><span class="control-key">← →</span> Yaw</div>
+                    <div class="control-item"><span class="control-key">Z</span> Roll Left</div>
+                    <div class="control-item"><span class="control-key">C</span> Roll Right</div>
+                    <div class="control-item"><span class="control-key">SPACE</span> Fire</div>
+                    <div class="control-item"><span class="control-key">SHIFT</span> Boost</div>
+                    <div class="control-item"><span class="control-key">P</span> Pause</div>
+                    <div class="control-item"><span class="control-key">M</span> Mute</div>
+                </div>
+                <div style="margin-top: 10px; text-align: center; font-size: 14px; color: #00f7ff;">
+                    Press H to toggle
+                </div>
+            </div>
+            
+            <div id="powerUpIndicator">SHIELD ACTIVE: 0s</div>
+            
+            <button id="pauseButton">PAUSE</button>
+        </div>
+        
+        <div id="startScreen">
+            <h1 class="neon-text" style="margin-bottom: 20px; font-size: 60px;">NEON SPACE DEFENDER</h1>
+            <h2 class="neon-text" style="color: #00ff00; margin-bottom: 40px; font-size: 36px;">MISSION EDITION</h2>
+            <div style="background: rgba(0,50,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #00ff00; margin-bottom: 20px; max-width: 700px;">
+                <h3 style="color: #00ff00; margin-bottom: 10px; text-align: center;">MISSION OBJECTIVE</h3>
+                <p style="text-align: center; margin-bottom: 15px; font-size: 20px;">
+                    Destroy the enemy base at the city center to win!
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4 style="color: #00f7ff; margin-bottom: 10px;">HOW TO PLAY:</h4>
+                        <ul style="text-align: left; line-height: 1.8;">
+                            <li>Fly through the neon cityscape</li>
+                            <li>Shoot enemy fighters with SPACE</li>
+                            <li>Avoid collisions with buildings</li>
+                            <li>Destroy the enemy base to win</li>
+                            <li>Stay within city boundaries</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff00ff; margin-bottom: 10px;">NEW FEATURES:</h4>
+                        <ul style="text-align: left; line-height: 1.8;">
+                            <li>Background music with controls</li>
+                            <li>Enhanced UI organization</li>
+                            <li>Radar system</li>
+                            <li>Temporary shield power-up</li>
+                            <li>Pause/resume functionality</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <button id="startButton">BEGIN MISSION</button>
+        </div>
+        
+        <div id="pauseOverlay">
+            <h1 class="neon-text" style="color: #00f7ff; margin-bottom: 20px; font-size: 60px;">GAME PAUSED</h1>
+            <p style="max-width: 600px; text-align: center; margin-bottom: 40px; line-height: 1.6; font-size: 18px;">
+                Take a break, pilot. The mission will resume when you're ready.
+            </p>
+            <button id="resumeButton">RESUME MISSION</button>
+        </div>
+        
+        <div id="gameOverScreen">
+            <h1 class="neon-text" style="color: #ff0055; margin-bottom: 20px; font-size: 60px;">MISSION FAILED</h1>
+            <h2 class="neon-text" style="font-size: 42px; margin-bottom: 30px;">SCORE: <span id="finalScore">0</span></h2>
+            <p style="max-width: 600px; text-align: center; margin-bottom: 40px; line-height: 1.6; font-size: 18px;">
+                Your ship sustained critical damage. Better luck next time, pilot!
+            </p>
+            <button id="restartButton">NEW MISSION</button>
+        </div>
+        
+        <div id="victoryScreen">
+            <h1 class="neon-text" style="color: #00ff00; margin-bottom: 20px; font-size: 60px;">MISSION ACCOMPLISHED!</h1>
+            <h2 class="neon-text" style="font-size: 42px; margin-bottom: 30px;">SCORE: <span id="victoryScore">0</span></h2>
+            <p style="max-width: 600px; text-align: center; margin-bottom: 40px; line-height: 1.6; font-size: 18px;">
+                You successfully destroyed the enemy base! The city is safe thanks to your efforts.
+            </p>
+            <button id="victoryRestartButton">NEW MISSION</button>
+        </div>
+        
+        <div class="damageEffect" id="damageEffect"></div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race2.ogg" type="audio/ogg">
+    </audio>
+
+    <script src="game.js"></script>
+</body>
+</html>
